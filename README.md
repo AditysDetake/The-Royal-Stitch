@@ -174,7 +174,7 @@ npx nodemon server.js
 - **Credentials Protected**: Passwords hashed using `bcrypt` with salt rounds.
 - **Environment Isolation**: `.env` is strictly git-ignored to prevent credential leaks.
 - **Regex Injection Prevention**: Email and search queries sanitize special regex characters before executing database queries.
-- **Session Security**: Cookies set with `httpOnly: true` and `sameSite: 'lax'`.
+- **Session Security**: Coookies set with `httpOnly: true` and `sameSite: 'lax'`.
 
 ---
 

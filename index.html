@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Royal Stitch – Master Tailor</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- ══════════════ NAVBAR ══════════════ -->
+  <header id="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="logo-icon">✂</span>
+        <div class="logo-text">
+          <span class="logo-main">The Royal Stitch</span>
+          <span class="logo-sub">Master Tailor</span>
+        </div>
+      </div>
+      <nav class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact">Contact</a>
+        <a href="#" onclick="openStatusModal();return false;" style="color:#E5B84D;font-weight:600;"><i class="fa fa-calendar-check"></i> Check Status</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section id="home" class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tagline">Crafted with Passion · Tailored for You</p>
+      <h1 class="hero-title">Where Every Thread<br><em>Tells a Story</em></h1>
+      <p class="hero-desc">Bespoke clothing crafted with decades of expertise, the finest fabrics, and the artisan's touch that has been passed down through generations.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn btn-gold">Our Services</a>
+        <a href="#" onclick="openAppointmentModal();return false;" class="btn btn-outline">Book Appointment</a>
+        <a href="#" onclick="openStatusModal();return false;" class="btn btn-outline" style="background:rgba(255,255,255,0.08);"><i class="fa fa-search"></i> Check Status</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span>25+</span><p>Years Experience</p></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span>5000+</span><p>Happy Customers</p></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span>100%</span><p>Custom Stitching</p></div>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <span></span>
+      <p>Scroll to explore</p>
+    </div>
+  </section>
+
+  <!-- ══════════════ ABOUT ══════════════ -->
+  <section id="about" class="about section">
+    <div class="container">
+      <div class="about-image-wrap">
+        <div class="about-img-frame">
+          <img src="images/about.jpg" alt="Master Tailor at work" onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'" />
+        </div>
+        <div class="about-badge">
+          <span>Est.</span>
+          <strong>2000</strong>
+        </div>
+      </div>
+      <div class="about-content">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">A Legacy of<br><em>Craftsmanship</em></h2>
+        <div class="ornament">❧</div>
+        <p>For over two and a half decades, we have been the trusted name in bespoke tailoring. Every garment that leaves our shop carries the promise of perfection — carefully measured, hand-cut, and lovingly stitched by master craftsmen.</p>
+        <p>We believe that clothing is not merely worn; it is experienced. From the very first fitting to the final delivery, we ensure every stitch reflects your personality and style.</p>
+        <div class="about-features">
+          <div class="feature"><i class="fa fa-scissors"></i><span>Hand-Crafted Precision</span></div>
+          <div class="feature"><i class="fa fa-gem"></i><span>Premium Fabrics Only</span></div>
+          <div class="feature"><i class="fa fa-clock"></i><span>On-Time Delivery</span></div>
+          <div class="feature"><i class="fa fa-star"></i><span>Satisfaction Guaranteed</span></div>
+        </div>
+        <a href="#contact" class="btn btn-gold">Meet the Tailor</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SERVICES ══════════════ -->
+  <section id="services" class="services section section-dark">
+    <div class="container flex-col">
+      <div class="section-header">
+        <p class="section-label light">What We Offer</p>
+        <h2 class="section-title light">Our <em>Services</em></h2>
+        <div class="ornament light">❧</div>
+        <p class="section-desc light">From traditional ethnic wear to sharp western formals, we cater to every style with unmatched craftsmanship.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon"><i class="fa fa-user-tie"></i></div>
+          <h3>Men's Ethnic Wear</h3>
+          <p>Sherwani, Kurta-Pyjama, Achkan, Bandhgala — crafted to perfection for weddings, festivals, and special occasions.</p>
+          <ul>
+            <li>Sherwani &amp; Achkan</li>
+            <li>Kurta-Pyjama Sets</li>
+            <li>Nehru Jacket</li>
+          </ul>
+        </div>
+        <div class="service-card featured">
+          <div class="service-badge">Popular</div>
+          <div class="service-icon"><i class="fa fa-vest"></i></div>
+          <h3>Men's Formals</h3>
+          <p>Bespoke suits, blazers, and formal trousers tailored with European precision for the modern gentleman.</p>
+          <ul>
+            <li>Two &amp; Three-Piece Suits</li>
+            <li>Formal Trousers &amp; Shirts</li>
+            <li>Waistcoats &amp; Blazers</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fa fa-female"></i></div>
+          <h3>Ladies' Wear</h3>
+          <p>Elegant salwar suits, lehenga blouses, and churidar sets designed to complement your grace and beauty.</p>
+          <ul>
+            <li>Salwar Suit &amp; Churidar</li>
+            <li>Lehenga &amp; Blouse</li>
+            <li>Anarkali &amp; Kurti</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fa fa-child"></i></div>
+          <h3>Kids' Wear</h3>
+          <p>Adorable, comfortable, and durable outfits for your little ones — because they deserve the best too!</p>
+          <ul>
+            <li>Ethnic &amp; Festival Wear</li>
+            <li>Casual Daily Wear</li>
+            <li>School Uniforms</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fa fa-cut"></i></div>
+          <h3>Alterations &amp; Repairs</h3>
+          <p>Precise alterations to resize, reshape, or refurbish your existing garments back to their former glory.</p>
+          <ul>
+            <li>Size Adjustments</li>
+            <li>Zipper &amp; Button Fix</li>
+            <li>Hemming &amp; Tapering</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <div class="service-icon"><i class="fa fa-ring"></i></div>
+          <h3>Bridal &amp; Wedding</h3>
+          <p>Make your special day unforgettable with exquisitely crafted bridal and groom outfits tailored just for you.</p>
+          <ul>
+            <li>Groom's Sherwani</li>
+            <li>Bride's Lehenga Blouse</li>
+            <li>Full Family Packages</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ GALLERY ══════════════ -->
+  <section id="gallery" class="gallery section">
+    <div class="container flex-col">
+      <div class="section-header">
+        <p class="section-label">Our Work</p>
+        <h2 class="section-title">The <em>Gallery</em></h2>
+        <div class="ornament">❧</div>
+        <p class="section-desc">A glimpse of the artistry and excellence we bring to every garment.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item tall" style="background-image:url('https://images.unsplash.com/photo-1594938298603-c8148f4f596f?w=500&q=80')">
+          <div class="gallery-overlay"><span>Men's Sherwani</span></div>
+        </div>
+        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=500&q=80')">
+          <div class="gallery-overlay"><span>Formal Suits</span></div>
+        </div>
+        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=500&q=80')">
+          <div class="gallery-overlay"><span>Ladies' Ethnic</span></div>
+        </div>
+        <div class="gallery-item wide" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80')">
+          <div class="gallery-overlay"><span>Bridal Collection</span></div>
+        </div>
+        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1551232864-3f0890e580d9?w=500&q=80')">
+          <div class="gallery-overlay"><span>Kurta Sets</span></div>
+        </div>
+        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500&q=80')">
+          <div class="gallery-overlay"><span>Fine Fabrics</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ PRICING ══════════════ -->
+  <section id="pricing" class="pricing section section-dark">
+    <div class="container flex-col">
+      <div class="section-header">
+        <p class="section-label light">Transparent Rates</p>
+        <h2 class="section-title light">Our <em>Pricing</em></h2>
+        <div class="ornament light">❧</div>
+        <p class="section-desc light">Honest pricing with no hidden charges. Every stitch is worth it.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Basic</h3>
+          <div class="pricing-badge">Everyday Wear</div>
+          <div class="price">₹299<span>/ piece</span></div>
+          <ul>
+            <li><i class="fa fa-check"></i> Kurta / Pyjama</li>
+            <li><i class="fa fa-check"></i> Casual Shirt or Trouser</li>
+            <li><i class="fa fa-check"></i> Simple Salwar Suit</li>
+            <li><i class="fa fa-check"></i> 1 Free Alteration</li>
+            <li class="na"><i class="fa fa-times"></i> Embroidery / Embellishment</li>
+            <li class="na"><i class="fa fa-times"></i> Rush Delivery</li>
+          </ul>
+          <a href="#contact" class="btn btn-outline-light">Get Started</a>
+        </div>
+        <div class="pricing-card featured">
+          <div class="popular-ribbon">Most Popular</div>
+          <h3>Standard</h3>
+          <div class="pricing-badge">Festive &amp; Formal</div>
+          <div class="price">₹799<span>/ piece</span></div>
+          <ul>
+            <li><i class="fa fa-check"></i> Suits &amp; Blazers</li>
+            <li><i class="fa fa-check"></i> Anarkali / Churidar</li>
+            <li><i class="fa fa-check"></i> Sherwani / Bandhgala</li>
+            <li><i class="fa fa-check"></i> 2 Free Alterations</li>
+            <li><i class="fa fa-check"></i> Basic Embellishment</li>
+            <li class="na"><i class="fa fa-times"></i> Rush Delivery</li>
+          </ul>
+          <a href="#contact" class="btn btn-gold">Book Now</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Premium</h3>
+          <div class="pricing-badge">Bridal &amp; Wedding</div>
+          <div class="price">₹2499<span>/ piece</span></div>
+          <ul>
+            <li><i class="fa fa-check"></i> Bridal Lehenga Blouse</li>
+            <li><i class="fa fa-check"></i> Groom's Sherwani</li>
+            <li><i class="fa fa-check"></i> Full Embroidery Work</li>
+            <li><i class="fa fa-check"></i> Unlimited Alterations</li>
+            <li><i class="fa fa-check"></i> Hand Embellishment</li>
+            <li><i class="fa fa-check"></i> Priority &amp; Rush Delivery</li>
+          </ul>
+          <a href="#contact" class="btn btn-outline-light">Get Started</a>
+        </div>
+      </div>
+      <p class="pricing-note">* Prices may vary based on fabric, complexity, and embellishments. Contact us for a custom quote.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════ TESTIMONIALS ══════════════ -->
+  <section id="testimonials" class="testimonials section">
+    <div class="container flex-col">
+      <div class="section-header">
+        <p class="section-label">What They Say</p>
+        <h2 class="section-title">Customer <em>Stories</em></h2>
+        <div class="ornament">❧</div>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"The sherwani stitched for my wedding was absolutely breathtaking. The fit was perfect and every detail was exactly as I imagined. Truly a master at work!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">R</div>
+            <div>
+              <strong>Rahul Sharma</strong>
+              <span>Groom, Delhi</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card featured">
+          <div class="stars">★★★★★</div>
+          <p>"I've been coming here for 10 years and have never been disappointed. The quality, attention to detail, and the personal service is unmatched. Highly recommended to everyone!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">P</div>
+            <div>
+              <strong>Priya Mehta</strong>
+              <span>Loyal Customer, Mumbai</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p>"Got my daughter's entire trousseau done here. The lehenga blouses were stunning and delivered on time. Professional, skilled, and incredibly warm team!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">S</div>
+            <div>
+              <strong>Sunita Patel</strong>
+              <span>Mother of the Bride, Pune</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★☆</div>
+          <p>"The formal suit they stitched for my job interview was perfect. The tailoring is impeccable and the price is very reasonable. Will definitely return for more!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">A</div>
+            <div>
+              <strong>Amit Kulkarni</strong>
+              <span>Working Professional, Nagpur</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CONTACT ══════════════ -->
+  <section id="contact" class="contact section section-dark">
+    <div class="container">
+      <div class="contact-info">
+        <p class="section-label light">Get in Touch</p>
+        <h2 class="section-title light">Book an <em>Appointment</em></h2>
+        <div class="ornament light">❧</div>
+        <p class="light-text">We'd love to help you create your perfect outfit. Visit us, call us, or drop a message — we're always happy to hear from you.</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <i class="fa fa-map-marker-alt"></i>
+            <div>
+              <strong>Visit Us</strong>
+              <span>Shop No. 12, Main Market,<br>Near Town Hall, City – 440001</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fa fa-phone"></i>
+            <div>
+              <strong>Call Us</strong>
+              <span>+91 98765 43210<br>+91 91234 56789</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fa fa-clock"></i>
+            <div>
+              <strong>Working Hours</strong>
+              <span>Mon–Sat: 9:00 AM – 8:00 PM<br>Sunday: 10:00 AM – 5:00 PM</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fa fa-envelope"></i>
+            <div>
+              <strong>Email Us</strong>
+              <span>info@theroyalstitch.in</span>
+            </div>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <form class="contact-form" id="contactForm">
+          <h3>Send Us a Message</h3>
+          <div class="form-group">
+            <input type="text" id="name" placeholder="Your Full Name" required />
+            <label for="name">Full Name</label>
+          </div>
+          <div class="form-group">
+            <input type="tel" id="phone" placeholder="Your Phone Number" required />
+            <label for="phone">Phone Number</label>
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Your Email Address" />
+            <label for="email">Email (Optional)</label>
+          </div>
+          <div class="form-group">
+            <select id="service" required>
+              <option value="" disabled selected>Select a Service</option>
+              <option>Men's Ethnic Wear</option>
+              <option>Men's Formals</option>
+              <option>Ladies' Wear</option>
+              <option>Kids' Wear</option>
+              <option>Alterations &amp; Repairs</option>
+              <option>Bridal &amp; Wedding</option>
+            </select>
+            <label for="service">Service Needed</label>
+          </div>
+          <div class="form-group">
+            <textarea id="message" rows="4" placeholder="Tell us about your requirement..."></textarea>
+            <label for="message">Message</label>
+          </div>
+          <button type="submit" class="btn btn-gold full-width">
+            <i class="fa fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon">✂</span>
+          <div class="logo-text">
+            <span class="logo-main">The Royal Stitch</span>
+            <span class="logo-sub">Master Tailor</span>
+          </div>
+        </div>
+        <p>Crafting elegance and perfection since 2000. Every stitch is a promise of quality.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-services">
+        <h4>Our Services</h4>
+        <a href="#services">Men's Ethnic Wear</a>
+        <a href="#services">Men's Formals</a>
+        <a href="#services">Ladies' Wear</a>
+        <a href="#services">Kids' Wear</a>
+        <a href="#services">Bridal &amp; Wedding</a>
+        <a href="#services">Alterations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 The Royal Stitch. All rights reserved. | Crafted with ❤ and many stitches.</p>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <!-- ══════════════ APPOINTMENT MODAL ══════════════ -->
+  <div id="apptModal" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.35);">
+      <!-- Modal Header -->
+      <div style="background:var(--burgundy);padding:1.4rem 1.6rem;border-radius:16px 16px 0 0;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <h3 style="font-family:'Playfair Display',serif;color:#fff;font-size:1.2rem;">Book an Appointment</h3>
+          <p style="color:rgba(255,255,255,.7);font-size:.82rem;margin-top:.2rem;">Pick a date &amp; time that suits you</p>
+        </div>
+        <button onclick="closeAppointmentModal()" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:1rem;">✕</button>
+      </div>
+      <!-- Modal Form -->
+      <form id="apptForm" style="padding:1.6rem;display:flex;flex-direction:column;gap:1rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <input type="text"  id="apptName"  placeholder="Full Name"     required/>
+            <label for="apptName">Full Name *</label>
+          </div>
+          <div class="form-group">
+            <input type="tel"   id="apptPhone" placeholder="Phone Number"  required/>
+            <label for="apptPhone">Phone *</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="email" id="apptEmail" placeholder="Email Address *" required/>
+          <label for="apptEmail">Email Address *</label>
+        </div>
+        <div class="form-group">
+          <select id="apptService" required>
+            <option value="" disabled selected>Select a Service</option>
+            <option>Men's Ethnic Wear</option>
+            <option>Men's Formals</option>
+            <option>Ladies' Wear</option>
+            <option>Kids' Wear</option>
+            <option>Alterations &amp; Repairs</option>
+            <option>Bridal &amp; Wedding</option>
+          </select>
+          <label for="apptService">Service *</label>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <input type="date" id="apptDate" required/>
+            <label for="apptDate">Date *</label>
+          </div>
+          <div class="form-group">
+            <select id="apptSlot" required disabled>
+              <option value="" disabled selected>Select date first</option>
+            </select>
+            <label for="apptSlot">Time Slot *</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <textarea id="apptNotes" rows="3" placeholder="Any special notes or requirements…"></textarea>
+          <label for="apptNotes">Notes</label>
+        </div>
+        <div id="apptSuccess" style="display:none;background:#e8f5e9;color:#2e7d32;padding:.8rem 1rem;border-radius:8px;font-size:.9rem;font-weight:600;"></div>
+        <div id="apptError"   style="display:none;background:#ffebee;color:#c62828;padding:.8rem 1rem;border-radius:8px;font-size:.9rem;font-weight:600;"></div>
+        <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;">
+          <i class="fa fa-calendar-check"></i> Confirm Appointment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════════════ APPOINTMENT STATUS MODAL ══════════════ -->
+  <div id="statusModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;padding:1rem;">
+    <div style="background:#fff;border-radius:12px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.4);display:flex;flex-direction:column;">
+      <div style="padding:1.2rem 1.6rem;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;background:#7B1F3A;color:#fff;border-radius:12px 12px 0 0;">
+        <h3 style="margin:0;font-size:1.15rem;font-family:'Playfair Display',serif;color:#E5B84D;"><i class="fa fa-calendar-check"></i> Check Appointment Status</h3>
+        <button onclick="closeStatusModal()" style="background:transparent;border:none;color:#fff;font-size:1.4rem;cursor:pointer;">&times;</button>
+      </div>
+      <div style="padding:1.6rem;">
+        <p style="font-size:0.88rem;color:#6b7280;margin-bottom:1rem;">Enter the email address you used when booking to view live status (Accepted, Pending, or Rejected) and notes from the master tailor.</p>
+        <form id="statusSearchForm" onsubmit="checkCustomerStatus(event)" style="display:flex;gap:.6rem;margin-bottom:1.2rem;">
+          <input type="email" id="statusEmail" placeholder="Enter your email address" required style="flex:1;padding:.7rem 1rem;border:1.5px solid #e5e7eb;border-radius:6px;font-size:.92rem;outline:none;" />
+          <button type="submit" class="btn btn-gold" style="padding:.7rem 1.4rem;white-space:nowrap;"><i class="fa fa-search"></i> Check</button>
+        </form>
+        <div id="statusResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

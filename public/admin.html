@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel — The Royal Stitch</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --burgundy: #7B1F3A; --burgundy-dark: #55152A;
+      --gold: #C8952A;     --gold-light: #E5B84D;
+      --cream: #FDF6EC;    --navy: #1A2A4A;
+      --green: #2e7d32;    --red: #c62828; --orange: #e65100; --purple: #6a1b9a;
+      --bg: #f4f6fa;       --card: #fff;
+      --text: #1a1a2e;     --muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    a    { text-decoration: none; color: inherit; }
+
+    /* ── Login Screen ── */
+    #loginScreen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--burgundy-dark) 0%, var(--navy) 100%);
+    }
+    .login-box {
+      background: var(--card); border-radius: 16px; padding: 2.5rem 2rem;
+      width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+      text-align: center;
+    }
+    .login-box .logo-icon { font-size: 2.5rem; color: var(--gold); }
+    .login-box h2 { font-size: 1.3rem; font-weight: 700; color: var(--burgundy); margin: .6rem 0 .3rem; }
+    .login-box p  { font-size: .85rem; color: var(--muted); margin-bottom: 1.8rem; }
+    .login-box input {
+      width: 100%; padding: .8rem 1rem; border: 1.5px solid var(--border);
+      border-radius: var(--radius); font-size: .95rem; margin-bottom: 1rem; outline: none;
+      transition: border .2s;
+    }
+    .login-box input:focus { border-color: var(--burgundy); }
+    .login-box button {
+      width: 100%; padding: .85rem; background: var(--burgundy); color: #fff;
+      border: none; border-radius: var(--radius); font-size: .95rem; font-weight: 600;
+      cursor: pointer; transition: background .2s;
+    }
+    .login-box button:hover { background: var(--burgundy-dark); }
+    .login-error { color: var(--red); font-size: .82rem; margin-top: .6rem; display: none; }
+
+    /* ── App Layout ── */
+    #app { display: none; }
+    .sidebar {
+      width: 240px; position: fixed; top: 0; left: 0; bottom: 0;
+      background: var(--navy); color: #fff; display: flex; flex-direction: column;
+      z-index: 100;
+    }
+    .sidebar-brand {
+      padding: 1.4rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,.1);
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .sidebar-brand .icon { font-size: 1.5rem; color: var(--gold); }
+    .sidebar-brand .title { font-size: .95rem; font-weight: 700; }
+    .sidebar-brand .sub   { font-size: .68rem; color: rgba(255,255,255,.5); letter-spacing: .1em; }
+
+    .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+    .nav-item {
+      display: flex; align-items: center; gap: .8rem;
+      padding: .75rem 1.4rem; cursor: pointer;
+      font-size: .88rem; font-weight: 500;
+      color: rgba(255,255,255,.65); transition: all .2s;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.07); color: #fff; }
+    .nav-item.active { background: rgba(200,149,42,.12); color: var(--gold-light); border-left-color: var(--gold); }
+    .nav-item i { width: 18px; font-size: .9rem; }
+
+    .sidebar-footer {
+      padding: 1rem 1.4rem; border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .sidebar-footer button {
+      width: 100%; background: rgba(255,255,255,.08); color: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.15); border-radius: 6px;
+      padding: .6rem; font-size: .85rem; cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+    }
+    .sidebar-footer button:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+    .main { margin-left: 240px; padding: 2rem; min-height: 100vh; }
+
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2rem;
+    }
+    .topbar h1 { font-size: 1.4rem; font-weight: 700; color: var(--text); }
+    .topbar .welcome { font-size: .85rem; color: var(--muted); }
+
+    /* ── Cards ── */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--card); border-radius: var(--radius);
+      padding: 1.4rem 1.2rem; border: 1px solid var(--border);
+      display: flex; align-items: center; gap: 1rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .stat-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .stat-icon.burgundy { background: rgba(123,31,58,.12); color: var(--burgundy); }
+    .stat-icon.gold     { background: rgba(200,149,42,.12); color: var(--gold); }
+    .stat-icon.green    { background: rgba(46,125,50,.12);  color: var(--green); }
+    .stat-icon.orange   { background: rgba(230,81,0,.12);   color: var(--orange); }
+    .stat-icon.purple   { background: rgba(106,27,154,.12); color: var(--purple); }
+    .stat-card .num     { font-size: 1.6rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .stat-card .lbl     { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+
+    /* ── Sections ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .card {
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 1rem 1.4rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .8rem;
+    }
+    .card-header h2 { font-size: 1rem; font-weight: 600; }
+    .filter-tabs { display: flex; gap: .5rem; }
+    .filter-tab {
+      padding: .3rem .9rem; border-radius: 20px; font-size: .78rem; font-weight: 600;
+      cursor: pointer; border: 1.5px solid var(--border); color: var(--muted); background: transparent;
+      transition: all .2s;
+    }
+    .filter-tab.active { background: var(--burgundy); color: #fff; border-color: var(--burgundy); }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: .75rem 1rem; text-align: left; font-size: .75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
+      background: #f9fafb; border-bottom: 1px solid var(--border);
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafbff; }
+    tbody td { padding: .8rem 1rem; font-size: .87rem; vertical-align: middle; }
+
+    .badge {
+      display: inline-block; padding: .22rem .7rem; border-radius: 20px;
+      font-size: .72rem; font-weight: 600; letter-spacing: .03em;
+    }
+    .badge.new       { background: rgba(200,149,42,.15); color: #a06610; }
+    .badge.read      { background: rgba(46,125,50,.12);  color: var(--green); }
+    .badge.pending   { background: rgba(230,81,0,.12);   color: var(--orange); }
+    .badge.confirmed { background: rgba(46,125,50,.12);  color: var(--green); }
+    .badge.cancelled { background: rgba(198,40,40,.1);   color: var(--red); }
+
+    .action-btns { display: flex; gap: .4rem; align-items: center; }
+    .btn-sm {
+      padding: .3rem .7rem; border-radius: 5px; font-size: .75rem; font-weight: 600;
+      cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: .3rem;
+    }
+    .btn-confirm  { background: rgba(46,125,50,.1);  color: var(--green); }
+    .btn-confirm:hover  { background: var(--green); color: #fff; }
+    .btn-cancel   { background: rgba(230,81,0,.1);   color: var(--orange); }
+    .btn-cancel:hover   { background: var(--orange); color: #fff; }
+    .btn-delete   { background: rgba(198,40,40,.1);  color: var(--red); }
+    .btn-delete:hover   { background: var(--red); color: #fff; }
+    .btn-read     { background: rgba(123,31,58,.1);  color: var(--burgundy); }
+    .btn-read:hover     { background: var(--burgundy); color: #fff; }
+    .btn-measure  { background: rgba(106,27,154,.1);  color: var(--purple); }
+    .btn-measure:hover  { background: var(--purple); color: #fff; }
+    .btn-slip     { background: rgba(200,149,42,.15); color: #a06610; }
+    .btn-slip:hover     { background: #a06610; color: #fff; }
+    .btn-edit     { background: rgba(26,42,74,.1);    color: var(--navy); }
+    .btn-edit:hover     { background: var(--navy); color: #fff; }
+    .btn-primary  { background: var(--burgundy); color: #fff; padding: .5rem 1.1rem; border-radius: 6px; font-weight: 600; font-size: .85rem; border: none; cursor: pointer; transition: background .2s; display: inline-flex; align-items: center; gap: .4rem; }
+    .btn-primary:hover  { background: var(--burgundy-dark); }
+
+    .empty-row td { text-align: center; color: var(--muted); padding: 2.5rem; font-size: .9rem; }
+
+    /* ── Modals ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(3px);
+      display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      background: #fff; border-radius: 12px; max-width: 800px; width: 100%; max-height: 90vh;
+      overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.3); display: flex; flex-direction: column;
+    }
+    .modal-head {
+      padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex;
+      justify-content: space-between; align-items: center; position: sticky; top: 0; background: #fff; z-index: 10;
+    }
+    .modal-head h3 { font-size: 1.15rem; color: var(--burgundy); font-weight: 700; }
+    .modal-close { background: transparent; border: none; font-size: 1.3rem; color: var(--muted); cursor: pointer; }
+    .modal-body { padding: 1.5rem; }
+    .modal-foot {
+      padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex;
+      justify-content: flex-end; gap: .8rem; position: sticky; bottom: 0; background: #fff; z-index: 10;
+    }
+    .field-group { margin-bottom: 1.2rem; }
+    .field-group h4 { font-size: .88rem; text-transform: uppercase; letter-spacing: .05em; color: var(--burgundy); margin-bottom: .6rem; border-bottom: 1px dashed var(--border); padding-bottom: .3rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+    .form-item label { display: block; font-size: .78rem; font-weight: 600; color: var(--muted); margin-bottom: .25rem; }
+    .form-item input, .form-item select, .form-item textarea {
+      width: 100%; padding: .55rem .75rem; border: 1.5px solid var(--border); border-radius: 6px;
+      font-size: .85rem; outline: none; transition: border .2s; font-family: inherit;
+    }
+    .form-item input:focus, .form-item select:focus, .form-item textarea:focus { border-color: var(--burgundy); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--navy); color: #fff;
+      padding: .85rem 1.4rem; border-radius: var(--radius);
+      font-size: .88rem; font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      opacity: 0; transform: translateY(10px);
+      transition: all .3s; z-index: 9999; pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Printable Slip ── */
+    #printArea { display: none; }
+    @media print {
+      body * { visibility: hidden !important; }
+      #printArea, #printArea * { visibility: visible !important; }
+      #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 0; }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar  { width: 200px; }
+      .main     { margin-left: 200px; padding: 1.2rem; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main    { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="logo-icon">✂</div>
+    <h2>Admin Panel</h2>
+    <p>The Royal Stitch — Tailor</p>
+    <input type="text"     id="loginUser" placeholder="Username" value="admin"/>
+    <input type="password" id="loginPass" placeholder="Password"/>
+    <button onclick="doLogin()"><i class="fa fa-sign-in-alt"></i> Login</button>
+    <div class="login-error" id="loginError">Invalid username or password.</div>
+  </div>
+</div>
+
+<!-- ── APP DASHBOARD ── -->
+<div id="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="icon">✂</div>
+      <div>
+        <div class="title">Royal Stitch</div>
+        <div class="sub">ADMIN PANEL</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" id="nav-dashboard" onclick="showSection('dashboard')">
+        <i class="fa fa-chart-pie"></i> Dashboard
+      </div>
+      <div class="nav-item" id="nav-contacts" onclick="showSection('contacts')">
+        <i class="fa fa-envelope"></i> Messages <span id="newBadge" style="margin-left:auto;background:var(--gold);color:#fff;font-size:.65rem;padding:.15rem .45rem;border-radius:10px;display:none"></span>
+      </div>
+      <div class="nav-item" id="nav-appointments" onclick="showSection('appointments')">
+        <i class="fa fa-calendar-check"></i> Appointments
+      </div>
+      <div class="nav-item" id="nav-measurements" onclick="showSection('measurements')">
+        <i class="fa fa-ruler-combined"></i> Measurements
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="doLogout()"><i class="fa fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="welcome" id="welcomeMsg"></div>
+      </div>
+      <a href="/" target="_blank" style="font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:.4rem;">
+        <i class="fa fa-external-link-alt"></i> View Website
+      </a>
+    </div>
+
+    <!-- 1. Dashboard View -->
+    <div id="sec-dashboard" class="section active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon burgundy"><i class="fa fa-envelope"></i></div>
+          <div><div class="num" id="st-total-contacts">—</div><div class="lbl">Total Messages</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold"><i class="fa fa-bell"></i></div>
+          <div><div class="num" id="st-new-contacts">—</div><div class="lbl">New Messages</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fa fa-clock"></i></div>
+          <div><div class="num" id="st-pending-appts">—</div><div class="lbl">Pending Appointments</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fa fa-check-circle"></i></div>
+          <div><div class="num" id="st-confirmed-appts">—</div><div class="lbl">Confirmed Appointments</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fa fa-ruler-combined"></i></div>
+          <div><div class="num" id="st-total-measurements">—</div><div class="lbl">Fitting Profiles</div></div>
+        </div>
+      </div>
+      <p style="color:var(--muted);font-size:.88rem;">Use the sidebar to manage customer messages, appointments, and bespoke measurement profiles.</p>
+    </div>
+
+    <!-- 2. Contacts View -->
+    <div id="sec-contacts" class="section">
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fa fa-envelope" style="color:var(--burgundy);margin-right:.4rem"></i> Customer Messages</h2>
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterContacts('all',this)">All</button>
+            <button class="filter-tab" onclick="filterContacts('new',this)">New</button>
+            <button class="filter-tab" onclick="filterContacts('read',this)">Read</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Name</th><th>Phone</th><th>Email</th>
+                <th>Service</th><th>Message</th><th>Status</th><th>Date</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="contactsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Appointments View -->
+    <div id="sec-appointments" class="section">
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fa fa-calendar-check" style="color:var(--burgundy);margin-right:.4rem"></i> Appointments</h2>
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterAppts('all',this)">All</button>
+            <button class="filter-tab" onclick="filterAppts('pending',this)">Pending (Review)</button>
+            <button class="filter-tab" onclick="filterAppts('confirmed',this)">Accepted</button>
+            <button class="filter-tab" onclick="filterAppts('cancelled',this)">Rejected</button>
+            <button class="filter-tab" onclick="filterAppts('completed',this)">Completed</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Name</th><th>Phone</th><th>Service</th>
+                <th>Date</th><th>Time</th><th>Notes</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="apptsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Measurements View -->
+    <div id="sec-measurements" class="section">
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fa fa-ruler-combined" style="color:var(--burgundy);margin-right:.4rem"></i> Customer Measurements & Fitting Profiles</h2>
+          <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;">
+            <input type="text" id="measureSearch" placeholder="Search customer, phone..." oninput="searchMeasurements()" style="padding:.4rem .85rem;border:1.5px solid var(--border);border-radius:20px;font-size:.82rem;outline:none;" />
+            <select id="measureGarmentFilter" onchange="loadMeasurements()" style="padding:.4rem .85rem;border:1.5px solid var(--border);border-radius:20px;font-size:.82rem;outline:none;background:#fff;">
+              <option value="all">All Garments</option>
+              <option value="Bespoke Suit">Bespoke Suit</option>
+              <option value="Sherwani">Sherwani</option>
+              <option value="Kurta Pajama">Kurta Pajama</option>
+              <option value="Shirt & Trouser">Shirt & Trouser</option>
+              <option value="Tuxedo">Tuxedo</option>
+              <option value="Safari Suit">Safari Suit</option>
+            </select>
+            <button class="btn-primary" onclick="openMeasurementModal()"><i class="fa fa-plus"></i> New Fitting Profile</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Customer</th><th>Phone</th><th>Garment Type</th><th>Fit Style</th><th>Key Specs (Chest / Waist / Length)</th><th>Last Updated</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="measurementsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── MEASUREMENT MODAL ── -->
+<div class="modal-overlay" id="measureModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="measureModalTitle"><i class="fa fa-ruler-combined"></i> Bespoke Measurement Profile</h3>
+      <button class="modal-close" onclick="closeMeasurementModal()">&times;</button>
+    </div>
+    <form id="measureForm" onsubmit="saveMeasurement(event)">
+      <input type="hidden" id="measureId" />
+      <div class="modal-body">
+        <!-- Basic Info -->
+        <div class="field-group">
+          <h4>Customer & Garment Details</h4>
+          <div class="grid-3">
+            <div class="form-item">
+              <label>Customer Name *</label>
+              <input type="text" id="m_customer_name" required placeholder="Full Name" />
+            </div>
+            <div class="form-item">
+              <label>Phone Number *</label>
+              <input type="text" id="m_phone" required placeholder="Phone / Mobile" />
+            </div>
+            <div class="form-item">
+              <label>Email (Optional)</label>
+              <input type="email" id="m_email" placeholder="customer@example.com" />
+            </div>
+          </div>
+          <div class="grid-3" style="margin-top:.8rem;">
+            <div class="form-item">
+              <label>Garment Type</label>
+              <select id="m_garment_type">
+                <option value="Bespoke Suit">Bespoke Suit (2 / 3 Piece)</option>
+                <option value="Sherwani">Royal Sherwani / Indo-Western</option>
+                <option value="Kurta Pajama">Kurta Pajama / Churidar</option>
+                <option value="Shirt & Trouser">Formal Shirt & Trouser</option>
+                <option value="Tuxedo">Classic Tuxedo</option>
+                <option value="Safari Suit">Safari Suit</option>
+                <option value="Bandhgala / Jodhpuri">Bandhgala / Jodhpuri</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label>Measurement Unit</label>
+              <select id="m_unit">
+                <option value="inches">Inches (in)</option>
+                <option value="cm">Centimeters (cm)</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label>Fit Preference</label>
+              <select id="m_fit_preference">
+                <option value="Slim Fit">Slim Fit (Modern Tailored)</option>
+                <option value="Regular Fit">Regular Fit (Classic)</option>
+                <option value="Comfort / Relaxed Fit">Comfort / Relaxed Fit</option>
+                <option value="Traditional Bespoke">Traditional Bespoke</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upper Body -->
+        <div class="field-group">
+          <h4>Upper Body (Jacket / Shirt / Kurta)</h4>
+          <div class="grid-4">
+            <div class="form-item"><label>Chest</label><input type="text" id="m_chest" placeholder="e.g. 40" /></div>
+            <div class="form-item"><label>Waist (Stomach)</label><input type="text" id="m_waist" placeholder="e.g. 34" /></div>
+            <div class="form-item"><label>Hips</label><input type="text" id="m_hip" placeholder="e.g. 40" /></div>
+            <div class="form-item"><label>Shoulder</label><input type="text" id="m_shoulder" placeholder="e.g. 18.5" /></div>
+          </div>
+          <div class="grid-4" style="margin-top:.8rem;">
+            <div class="form-item"><label>Sleeve Length</label><input type="text" id="m_sleeve_length" placeholder="e.g. 25" /></div>
+            <div class="form-item"><label>Neck / Collar</label><input type="text" id="m_neck_collar" placeholder="e.g. 16" /></div>
+            <div class="form-item"><label>Garment Length</label><input type="text" id="m_garment_length" placeholder="e.g. 30" /></div>
+            <div class="form-item"><label>Bicep</label><input type="text" id="m_bicep" placeholder="e.g. 14" /></div>
+          </div>
+          <div class="grid-2" style="margin-top:.8rem;">
+            <div class="form-item"><label>Cross Back</label><input type="text" id="m_cross_back" placeholder="e.g. 17.5" /></div>
+            <div class="form-item"><label>Wrist / Cuff</label><input type="text" id="m_wrist" placeholder="e.g. 9" /></div>
+          </div>
+        </div>
+
+        <!-- Lower Body -->
+        <div class="field-group">
+          <h4>Lower Body (Trousers / Pajama)</h4>
+          <div class="grid-4">
+            <div class="form-item"><label>Trouser Waist</label><input type="text" id="m_trouser_waist" placeholder="e.g. 34" /></div>
+            <div class="form-item"><label>Trouser Hips</label><input type="text" id="m_trouser_hip" placeholder="e.g. 41" /></div>
+            <div class="form-item"><label>Trouser Length</label><input type="text" id="m_trouser_length" placeholder="e.g. 40" /></div>
+            <div class="form-item"><label>Inseam</label><input type="text" id="m_inseam" placeholder="e.g. 30" /></div>
+          </div>
+          <div class="grid-3" style="margin-top:.8rem;">
+            <div class="form-item"><label>Thigh</label><input type="text" id="m_thigh" placeholder="e.g. 24" /></div>
+            <div class="form-item"><label>Knee</label><input type="text" id="m_knee" placeholder="e.g. 18" /></div>
+            <div class="form-item"><label>Bottom Opening</label><input type="text" id="m_bottom_opening" placeholder="e.g. 14.5" /></div>
+          </div>
+        </div>
+
+        <!-- Styling & Fitting Notes -->
+        <div class="field-group" style="margin-bottom:0;">
+          <h4>Bespoke Tailoring & Posture Notes</h4>
+          <div class="form-item">
+            <textarea id="m_notes" rows="3" placeholder="e.g. Left shoulder slight slope, peaked lapel, 2-inch cuff on trouser, extra comfort ease."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn-sm" style="background:#e5e7eb;padding:.6rem 1.2rem;font-size:.85rem;" onclick="closeMeasurementModal()">Cancel</button>
+        <button type="submit" class="btn-primary" style="padding:.6rem 1.4rem;"><i class="fa fa-save"></i> Save Profile</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── PRINTABLE SLIP MODAL ── -->
+<div class="modal-overlay" id="slipModal">
+  <div class="modal-card" style="max-width:620px;">
+    <div class="modal-head">
+      <h3><i class="fa fa-print"></i> Tailoring Work Order Slip</h3>
+      <button class="modal-close" onclick="closeSlipModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="slipContent" style="padding:1.8rem;"></div>
+    <div class="modal-foot">
+      <button class="btn-sm" style="background:#e5e7eb;padding:.6rem 1.2rem;font-size:.85rem;" onclick="closeSlipModal()">Close</button>
+      <button class="btn-primary" style="padding:.6rem 1.4rem;" onclick="doPrintSlip()"><i class="fa fa-print"></i> Print Slip</button>
+    </div>
+  </div>
+</div>
+
+<!-- Print Container -->
+<div id="printArea"></div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ── State ──────────────────────────────────────
+let contactFilter = 'all';
+let apptFilter    = 'all';
+let allAppointments = [];
+let allMeasurements = [];
+
+// ── Helpers ────────────────────────────────────
+function toast(msg, color = '#1A2A4A') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.background = color;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function api(method, url, body) {
+  try {
+    const opts = { method, headers: { 'Content-Type': 'application/json' }, credentials: 'include' };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(url, opts);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(`API Error on ${method} ${url}:`, err);
+    return { success: false, message: err.message || 'Network request failed' };
+  }
+}
+
+// ── Auth ───────────────────────────────────────
+async function doLogin() {
+  const user = document.getElementById('loginUser').value;
+  const pass = document.getElementById('loginPass').value;
+  const err  = document.getElementById('loginError');
+  err.style.display = 'none';
+
+  const data = await api('POST', '/api/admin/login', { username: user, password: pass });
+  if (data.success) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('welcomeMsg').textContent = `Logged in as ${user}`;
+    loadStats(); loadContacts(); loadAppointments();
+  } else {
+    err.style.display = 'block';
+  }
+}
+
+async function doLogout() {
+  await api('POST', '/api/admin/logout');
+  location.reload();
+}
+
+// Enter key on login
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// Check existing session on load
+(async () => {
+  try {
+    const data = await api('GET', '/api/admin/me');
+    if (data.success) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('welcomeMsg').textContent = `Logged in as ${data.username}`;
+      loadStats(); loadContacts(); loadAppointments();
+    }
+  } catch (err) {
+    console.error('Session check error:', err);
+  }
+})();
+
+// ── Navigation ─────────────────────────────────
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav .nav-item').forEach(n => n.classList.remove('active'));
+  
+  const targetSec = document.getElementById('sec-' + name);
+  if (targetSec) targetSec.classList.add('active');
+
+  const targetNav = document.getElementById('nav-' + name);
+  if (targetNav) targetNav.classList.add('active');
+
+  const titles = {
+    dashboard: 'Dashboard',
+    contacts: 'Customer Messages',
+    appointments: 'Appointments',
+    measurements: 'Customer Measurements & Fitting Profiles'
+  };
+  document.getElementById('pageTitle').textContent = titles[name] || 'Admin';
+  if (name === 'measurements') loadMeasurements();
+  if (name === 'appointments') loadAppointments();
+  if (name === 'contacts') loadContacts();
+}
+
+// ── Stats ──────────────────────────────────────
+async function loadStats() {
+  const data = await api('GET', '/api/admin/stats');
+  if (!data.success) return;
+  const s = data.stats;
+  document.getElementById('st-total-contacts').textContent       = s.contacts.total;
+  document.getElementById('st-new-contacts').textContent         = s.contacts.new;
+  document.getElementById('st-pending-appts').textContent        = s.appointments.pending;
+  document.getElementById('st-confirmed-appts').textContent      = s.appointments.confirmed;
+  if (document.getElementById('st-total-measurements')) {
+    document.getElementById('st-total-measurements').textContent = s.measurements ? s.measurements.total : 0;
+  }
+
+  const nb = document.getElementById('newBadge');
+  if (s.contacts.new > 0) { nb.style.display = 'inline'; nb.textContent = s.contacts.new; }
+  else nb.style.display = 'none';
+}
+
+// ── Contacts ───────────────────────────────────
+async function loadContacts() {
+  const url  = contactFilter === 'all' ? '/api/admin/contacts' : `/api/admin/contacts?status=${contactFilter}`;
+  const data = await api('GET', url);
+  const tbody = document.getElementById('contactsTable');
+  if (!data.success || !data.data || data.data.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="9">No messages found.</td></tr>'; return;
+  }
+  tbody.innerHTML = data.data.map(r => `
+    <tr id="cr-${r.id}">
+      <td title="${r.id}"><span style="font-family:monospace;font-size:0.85em;color:var(--muted)">#${String(r.id).slice(-6)}</span></td>
+      <td><strong>${esc(r.name)}</strong></td>
+      <td>${esc(r.phone)}</td>
+      <td>${esc(r.email || '—')}</td>
+      <td>${esc(r.service || '—')}</td>
+      <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(r.message || '')}">${esc(r.message || '—')}</td>
+      <td><span class="badge ${r.status}">${r.status}</span></td>
+      <td style="white-space:nowrap">${r.created_at}</td>
+      <td>
+        <div class="action-btns">
+          ${r.status === 'new' ? `<button class="btn-sm btn-read" onclick="updateContact('${r.id}','read')">Mark Read</button>` : ''}
+          <button class="btn-sm btn-delete" onclick="deleteContact('${r.id}')">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterContacts(f, el) {
+  contactFilter = f;
+  document.querySelectorAll('#sec-contacts .filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  loadContacts();
+}
+
+async function updateContact(id, status) {
+  const data = await api('PATCH', `/api/admin/contacts/${id}`, { status });
+  if (data.success) { toast('✅ Message marked as ' + status, '#2e7d32'); loadContacts(); loadStats(); }
+}
+
+async function deleteContact(id) {
+  if (!confirm('Delete this message?')) return;
+  const data = await api('DELETE', `/api/admin/contacts/${id}`);
+  if (data.success) { toast('🗑️ Message deleted', '#c62828'); loadContacts(); loadStats(); }
+}
+
+// ── Appointments ───────────────────────────────
+async function loadAppointments() {
+  try {
+    const url  = apptFilter === 'all' ? '/api/admin/appointments' : `/api/admin/appointments?status=${apptFilter}`;
+    const data = await api('GET', url);
+    const tbody = document.getElementById('apptsTable');
+    if (!tbody) return;
+
+    if (!data || !data.success) {
+      if (data && data.message && data.message.toLowerCase().includes('unauthoris')) {
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('app').style.display = 'none';
+        return;
+      }
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="9" style="color:var(--red);">Error: ${esc((data && data.message) || 'Failed to load appointments')}</td></tr>`;
+      return;
+    }
+
+    if (!data.data || data.data.length === 0) {
+      allAppointments = [];
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="9">No appointments found in "${apptFilter}" category.</td></tr>`;
+      return;
+    }
+
+    allAppointments = data.data;
+    tbody.innerHTML = data.data.map(r => {
+      // Status styling
+      let statusBadge = '';
+      if (r.status === 'pending') {
+        statusBadge = '<span class="badge" style="background:rgba(230,81,0,.12);color:var(--orange);"><i class="fa fa-clock"></i> Pending Review</span>';
+      } else if (r.status === 'confirmed') {
+        statusBadge = '<span class="badge" style="background:rgba(46,125,50,.12);color:var(--green);"><i class="fa fa-check"></i> Accepted</span>';
+      } else if (r.status === 'cancelled') {
+        statusBadge = '<span class="badge" style="background:rgba(198,40,40,.12);color:var(--red);"><i class="fa fa-times"></i> Rejected</span>';
+      } else if (r.status === 'completed') {
+        statusBadge = '<span class="badge" style="background:rgba(26,42,74,.12);color:var(--navy);"><i class="fa fa-check-double"></i> Completed</span>';
+      }
+
+      // Clean phone for WhatsApp link
+      const cleanPhone = String(r.phone || '').replace(/[^0-9]/g, '');
+      const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+      const waStatus = r.status === 'confirmed' ? 'Accepted & Confirmed! 🧵' : r.status === 'completed' ? 'Completed & Ready for Pickup! 👔' : r.status === 'cancelled' ? 'Rejected/Rescheduled.' : (r.status || '');
+      const custName = r.name || 'Customer';
+      const custServ = r.service || 'Appointment';
+      const custDate = r.date || '';
+      const waText = encodeURIComponent(`Hello ${custName}, this is from The Royal Stitch — Master Tailor. Regarding your ${custServ} on ${custDate}: Status is ${waStatus}. ${r.tailor_note ? 'Note: ' + r.tailor_note : ''}`);
+
+      return `
+        <tr id="ar-${r.id}">
+          <td title="${r.id}"><span style="font-family:monospace;font-size:0.85em;color:var(--muted)">#${String(r.id).slice(-6)}</span></td>
+          <td><strong>${esc(r.name)}</strong></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:.4rem;">
+              <span>${esc(r.phone)}</span>
+              <a href="https://wa.me/${waPhone}?text=${waText}" target="_blank" class="btn-sm" style="background:#25D366;color:#fff;padding:.18rem .45rem;border-radius:4px;" title="Chat with Customer on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            ${r.email ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:2px;"><i class="fa fa-envelope" style="font-size:0.7rem;"></i> ${esc(r.email)}</div>` : ''}
+          </td>
+          <td>${esc(r.service)}</td>
+          <td><strong>${esc(r.date)}</strong></td>
+          <td>${esc(r.time_slot)}</td>
+          <td style="max-width:180px;">
+            <div style="font-size:0.82rem;color:var(--text);">${esc(r.notes || '—')}</div>
+            ${r.tailor_note ? `<div style="font-size:0.75rem;color:var(--burgundy);margin-top:3px;font-style:italic;"><strong>Tailor:</strong> ${esc(r.tailor_note)}</div>` : ''}
+          </td>
+          <td>${statusBadge}</td>
+          <td>
+            <div class="action-btns">
+              <!-- Accept Button -->
+              ${r.status === 'pending' || r.status === 'cancelled' ? `
+                <button class="btn-sm btn-confirm" title="Accept Appointment" onclick="acceptAppt('${r.id}')"><i class="fa fa-check"></i> Accept</button>
+              ` : ''}
+
+              <!-- Reject Button -->
+              ${r.status === 'pending' || r.status === 'confirmed' ? `
+                <button class="btn-sm btn-cancel" title="Reject Appointment" onclick="rejectAppt('${r.id}')"><i class="fa fa-times"></i> Reject</button>
+              ` : ''}
+
+              <!-- Complete Button -->
+              ${r.status === 'confirmed' ? `
+                <button class="btn-sm" style="background:rgba(26,42,74,.1);color:var(--navy);" title="Mark Fitting Done" onclick="completeAppt('${r.id}')"><i class="fa fa-flag-checkered"></i> Done</button>
+              ` : ''}
+
+              <!-- Measurement Shortcut (Available once Accepted) -->
+              ${(r.status === 'confirmed' || r.status === 'completed') ? `
+                <button class="btn-sm btn-measure" title="Record Bespoke Measurements" onclick="measureAppointment('${r.id}')"><i class="fa fa-ruler"></i> Measure</button>
+              ` : ''}
+              
+              <!-- Delete Button -->
+              <button class="btn-sm btn-delete" title="Delete record" onclick="deleteAppt('${r.id}')"><i class="fa fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('Error in loadAppointments:', err);
+    const tbody = document.getElementById('apptsTable');
+    if (tbody) tbody.innerHTML = `<tr class="empty-row"><td colspan="9" style="color:var(--red);">Rendering error: ${err.message}</td></tr>`;
+  }
+}
+
+function filterAppts(f, el) {
+  apptFilter = f;
+  document.querySelectorAll('#sec-appointments .filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  loadAppointments();
+}
+
+async function acceptAppt(id) {
+  const note = prompt('Optional message/instructions for customer (e.g. "Please bring fabric material"):', 'Accepted. Looking forward to your visit!');
+  if (note === null) return; // cancelled prompt
+  const data = await api('PATCH', `/api/admin/appointments/${id}`, { status: 'confirmed', tailor_note: note });
+  if (data.success) {
+    toast('✅ Appointment Accepted!', '#2e7d32');
+    loadAppointments();
+    loadStats();
+  }
+}
+
+async function rejectAppt(id) {
+  const note = prompt('Reason for rejecting/rescheduling (e.g. "Time slot fully booked" or "Fabric master unavailable"):', 'Slot unavailable. Please choose another time slot.');
+  if (note === null) return;
+  const data = await api('PATCH', `/api/admin/appointments/${id}`, { status: 'cancelled', tailor_note: note });
+  if (data.success) {
+    toast('🔴 Appointment Rejected (Slot freed)', '#c62828');
+    loadAppointments();
+    loadStats();
+  }
+}
+
+async function completeAppt(id) {
+  const defaultNote = 'Your garment is tailored and ready! Please come and collect it on any working day (Mon-Sat, 10:00 AM - 8:00 PM).';
+  const note = prompt('Completion & Collection message for customer (this will show on their status check):', defaultNote);
+  if (note === null) return; // User cancelled
+  
+  const data = await api('PATCH', `/api/admin/appointments/${id}`, { 
+    status: 'completed', 
+    tailor_note: note.trim() 
+  });
+  
+  if (data.success) {
+    toast('🎉 Appointment marked as Completed & Ready for Pickup!', '#1A2A4A');
+    loadAppointments();
+    loadStats();
+  }
+}
+
+async function deleteAppt(id) {
+  if (!confirm('Delete this appointment record entirely?')) return;
+  const data = await api('DELETE', `/api/admin/appointments/${id}`);
+  if (data.success) { toast('🗑️ Appointment deleted', '#c62828'); loadAppointments(); loadStats(); }
+}
+
+// ── Measurements ───────────────────────────────
+async function loadMeasurements() {
+  const garment = document.getElementById('measureGarmentFilter') ? document.getElementById('measureGarmentFilter').value : 'all';
+  const url = garment === 'all' ? '/api/admin/measurements' : `/api/admin/measurements?garment_type=${encodeURIComponent(garment)}`;
+  const data = await api('GET', url);
+  const tbody = document.getElementById('measurementsTable');
+  if (!data.success || !data.data || data.data.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No fitting profiles found. Click "+ New Fitting Profile" to record measurements.</td></tr>';
+    allMeasurements = [];
+    return;
+  }
+  allMeasurements = data.data;
+  renderMeasurements(allMeasurements);
+}
+
+function renderMeasurements(items) {
+  const tbody = document.getElementById('measurementsTable');
+  if (!items || items.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No matching measurements found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = items.map(m => {
+    const unit = m.unit === 'cm' ? 'cm' : '"';
+    const chest = m.chest ? `${m.chest}${unit}` : '—';
+    const waist = m.waist || m.trouser_waist ? `${m.waist || m.trouser_waist}${unit}` : '—';
+    const len = m.garment_length || m.trouser_length ? `${m.garment_length || m.trouser_length}${unit}` : '—';
+    const updated = m.updated_at ? new Date(m.updated_at).toLocaleDateString() : '—';
+
+    return `
+      <tr id="mr-${m.id}">
+        <td title="${m.id}"><span style="font-family:monospace;font-size:0.85em;color:var(--muted)">#${String(m.id).slice(-6)}</span></td>
+        <td><strong>${esc(m.customer_name)}</strong></td>
+        <td>
+          <div>${esc(m.phone)}</div>
+          ${m.email ? `<small style="color:var(--muted)">${esc(m.email)}</small>` : ''}
+        </td>
+        <td><span class="badge" style="background:rgba(123,31,58,.1);color:var(--burgundy);">${esc(m.garment_type)}</span></td>
+        <td><span style="font-size:0.82rem;font-weight:500;">${esc(m.fit_preference || 'Slim Fit')}</span></td>
+        <td>
+          <span style="font-size:0.83rem;font-family:monospace;color:var(--navy);font-weight:600;">
+            C: ${chest} | W: ${waist} | L: ${len}
+          </span>
+        </td>
+        <td style="white-space:nowrap;font-size:0.82rem;color:var(--muted);">${updated}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn-sm btn-edit" title="Edit Profile" onclick="editMeasurement('${m.id}')"><i class="fa fa-edit"></i> Edit</button>
+            <button class="btn-sm btn-slip" title="Print Tailoring Slip" onclick="viewSlip('${m.id}')"><i class="fa fa-print"></i> Slip</button>
+            <button class="btn-sm btn-delete" title="Delete Profile" onclick="deleteMeasurement('${m.id}')"><i class="fa fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function searchMeasurements() {
+  const query = document.getElementById('measureSearch').value.toLowerCase().trim();
+  if (!query) {
+    renderMeasurements(allMeasurements);
+    return;
+  }
+  const filtered = allMeasurements.filter(m => 
+    (m.customer_name && m.customer_name.toLowerCase().includes(query)) ||
+    (m.phone && m.phone.toLowerCase().includes(query)) ||
+    (m.email && m.email.toLowerCase().includes(query)) ||
+    (m.garment_type && m.garment_type.toLowerCase().includes(query))
+  );
+  renderMeasurements(filtered);
+}
+
+function openMeasurementModal(id = null) {
+  document.getElementById('measureForm').reset();
+  document.getElementById('measureId').value = '';
+  document.getElementById('measureModalTitle').innerHTML = '<i class="fa fa-ruler-combined"></i> New Bespoke Fitting Profile';
+  document.getElementById('measureModal').classList.add('open');
+}
+
+function closeMeasurementModal() {
+  document.getElementById('measureModal').classList.remove('open');
+}
+
+async function editMeasurement(id) {
+  const data = await api('GET', `/api/admin/measurements/${id}`);
+  if (!data.success) { toast('❌ Could not load profile', '#c62828'); return; }
+  const m = data.data;
+
+  document.getElementById('measureId').value = m.id;
+  document.getElementById('measureModalTitle').innerHTML = `<i class="fa fa-edit"></i> Edit Fitting: ${esc(m.customer_name)}`;
+  
+  document.getElementById('m_customer_name').value   = m.customer_name || '';
+  document.getElementById('m_phone').value           = m.phone || '';
+  document.getElementById('m_email').value           = m.email || '';
+  document.getElementById('m_garment_type').value   = m.garment_type || 'Bespoke Suit';
+  document.getElementById('m_unit').value           = m.unit || 'inches';
+  document.getElementById('m_fit_preference').value = m.fit_preference || 'Slim Fit';
+  document.getElementById('m_notes').value          = m.notes || '';
+
+  // Upper Body
+  document.getElementById('m_chest').value          = m.chest || '';
+  document.getElementById('m_waist').value          = m.waist || '';
+  document.getElementById('m_hip').value            = m.hip || '';
+  document.getElementById('m_shoulder').value       = m.shoulder || '';
+  document.getElementById('m_sleeve_length').value  = m.sleeve_length || '';
+  document.getElementById('m_neck_collar').value    = m.neck_collar || '';
+  document.getElementById('m_garment_length').value = m.garment_length || '';
+  document.getElementById('m_bicep').value          = m.bicep || '';
+  document.getElementById('m_cross_back').value     = m.cross_back || '';
+  document.getElementById('m_wrist').value          = m.wrist || '';
+
+  // Lower Body
+  document.getElementById('m_trouser_waist').value   = m.trouser_waist || '';
+  document.getElementById('m_trouser_hip').value     = m.trouser_hip || '';
+  document.getElementById('m_trouser_length').value  = m.trouser_length || '';
+  document.getElementById('m_inseam').value          = m.inseam || '';
+  document.getElementById('m_thigh').value           = m.thigh || '';
+  document.getElementById('m_knee').value            = m.knee || '';
+  document.getElementById('m_bottom_opening').value  = m.bottom_opening || '';
+
+  document.getElementById('measureModal').classList.add('open');
+}
+
+async function saveMeasurement(e) {
+  e.preventDefault();
+  const id = document.getElementById('measureId').value;
+  const payload = {
+    customer_name:   document.getElementById('m_customer_name').value.trim(),
+    phone:           document.getElementById('m_phone').value.trim(),
+    email:           document.getElementById('m_email').value.trim(),
+    garment_type:    document.getElementById('m_garment_type').value,
+    unit:            document.getElementById('m_unit').value,
+    fit_preference:  document.getElementById('m_fit_preference').value,
+    notes:           document.getElementById('m_notes').value.trim(),
+
+    chest:           document.getElementById('m_chest').value.trim(),
+    waist:           document.getElementById('m_waist').value.trim(),
+    hip:             document.getElementById('m_hip').value.trim(),
+    shoulder:        document.getElementById('m_shoulder').value.trim(),
+    sleeve_length:   document.getElementById('m_sleeve_length').value.trim(),
+    neck_collar:     document.getElementById('m_neck_collar').value.trim(),
+    garment_length:  document.getElementById('m_garment_length').value.trim(),
+    bicep:           document.getElementById('m_bicep').value.trim(),
+    cross_back:      document.getElementById('m_cross_back').value.trim(),
+    wrist:           document.getElementById('m_wrist').value.trim(),
+
+    trouser_waist:   document.getElementById('m_trouser_waist').value.trim(),
+    trouser_hip:     document.getElementById('m_trouser_hip').value.trim(),
+    trouser_length:  document.getElementById('m_trouser_length').value.trim(),
+    inseam:          document.getElementById('m_inseam').value.trim(),
+    thigh:           document.getElementById('m_thigh').value.trim(),
+    knee:            document.getElementById('m_knee').value.trim(),
+    bottom_opening:  document.getElementById('m_bottom_opening').value.trim()
+  };
+
+  const method = id ? 'PUT' : 'POST';
+  const url    = id ? `/api/admin/measurements/${id}` : '/api/admin/measurements';
+
+  const res = await api(method, url, payload);
+  if (res.success) {
+    toast(`✅ Fitting profile ${id ? 'updated' : 'created'}!`, '#2e7d32');
+    closeMeasurementModal();
+    loadMeasurements();
+    loadStats();
+  } else {
+    toast(`❌ ${res.message || 'Error saving profile'}`, '#c62828');
+  }
+}
+
+async function deleteMeasurement(id) {
+  if (!confirm('Are you sure you want to delete this customer measurement profile?')) return;
+  const res = await api('DELETE', `/api/admin/measurements/${id}`);
+  if (res.success) {
+    toast('🗑️ Fitting profile deleted', '#c62828');
+    loadMeasurements();
+    loadStats();
+  } else {
+    toast('❌ Delete failed', '#c62828');
+  }
+}
+
+function measureAppointment(id) {
+  const appt = (allAppointments || []).find(a => String(a.id) === String(id));
+  if (!appt) {
+    toast('❌ Appointment details not found', '#c62828');
+    return;
+  }
+  openMeasurementForCustomer(appt.name, appt.phone, appt.email || '', appt.service);
+}
+
+function openMeasurementForCustomer(name, phone, email, service) {
+  openMeasurementModal();
+  document.getElementById('m_customer_name').value = name || '';
+  document.getElementById('m_phone').value         = phone || '';
+  document.getElementById('m_email').value         = email || '';
+  
+  const gSelect = document.getElementById('m_garment_type');
+  if (service && gSelect) {
+    const s = service.toLowerCase();
+    for (let i = 0; i < gSelect.options.length; i++) {
+      const opt = gSelect.options[i].value.toLowerCase();
+      if (s.includes('suit') && opt.includes('suit')) { gSelect.selectedIndex = i; break; }
+      if (s.includes('ethnic') && (opt.includes('sherwani') || opt.includes('kurta'))) { gSelect.selectedIndex = i; break; }
+      if (s.includes('formal') && (opt.includes('suit') || opt.includes('shirt'))) { gSelect.selectedIndex = i; break; }
+      if (s.includes('tuxedo') && opt.includes('tuxedo')) { gSelect.selectedIndex = i; break; }
+    }
+  }
+}
+
+async function viewSlip(id) {
+  const data = await api('GET', `/api/admin/measurements/${id}`);
+  if (!data.success) { toast('❌ Could not load slip', '#c62828'); return; }
+  const m = data.data;
+  const u = m.unit === 'cm' ? 'cm' : 'inches';
+
+  const html = `
+    <div style="font-family:'Inter',sans-serif;color:#1A2A4A;border:2px solid #7B1F3A;border-radius:8px;padding:1.5rem;background:#fff;">
+      <div style="text-align:center;border-bottom:2px solid #7B1F3A;padding-bottom:1rem;margin-bottom:1.2rem;">
+        <h2 style="font-size:1.4rem;color:#7B1F3A;margin:0;letter-spacing:.05em;">✂ THE ROYAL STITCH</h2>
+        <p style="font-size:0.75rem;color:#6b7280;margin:.2rem 0 0;text-transform:uppercase;letter-spacing:.1em;">Master Tailor & Bespoke Clothier · Fitting Work Order</p>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;margin-bottom:1.2rem;font-size:0.85rem;background:#FDF6EC;padding:.8rem;border-radius:6px;border:1px solid #E5B84D;">
+        <div>
+          <div><strong>Customer:</strong> ${esc(m.customer_name)}</div>
+          <div><strong>Phone:</strong> ${esc(m.phone)}</div>
+          ${m.email ? `<div><strong>Email:</strong> ${esc(m.email)}</div>` : ''}
+        </div>
+        <div style="text-align:right;">
+          <div><strong>Garment:</strong> ${esc(m.garment_type)}</div>
+          <div><strong>Fit:</strong> ${esc(m.fit_preference || 'Slim Fit')}</div>
+          <div><strong>Date:</strong> ${new Date(m.updated_at || Date.now()).toLocaleDateString()}</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
+        <!-- Upper Body -->
+        <div style="border:1px solid #e5e7eb;border-radius:6px;padding:.8rem;">
+          <h4 style="margin:0 0 .5rem;color:#7B1F3A;font-size:0.82rem;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:.2rem;">Upper Body (${u})</h4>
+          <table style="width:100%;font-size:0.8rem;border-collapse:collapse;">
+            <tr><td style="padding:.2rem 0;color:#666;">Chest:</td><td style="font-weight:700;text-align:right;">${m.chest || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Waist:</td><td style="font-weight:700;text-align:right;">${m.waist || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Hips:</td><td style="font-weight:700;text-align:right;">${m.hip || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Shoulder:</td><td style="font-weight:700;text-align:right;">${m.shoulder || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Sleeve:</td><td style="font-weight:700;text-align:right;">${m.sleeve_length || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Neck/Collar:</td><td style="font-weight:700;text-align:right;">${m.neck_collar || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Garment Length:</td><td style="font-weight:700;text-align:right;">${m.garment_length || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Bicep / Wrist:</td><td style="font-weight:700;text-align:right;">${m.bicep || '—'} / ${m.wrist || '—'}</td></tr>
+          </table>
+        </div>
+
+        <!-- Lower Body -->
+        <div style="border:1px solid #e5e7eb;border-radius:6px;padding:.8rem;">
+          <h4 style="margin:0 0 .5rem;color:#7B1F3A;font-size:0.82rem;text-transform:uppercase;border-bottom:1px solid #eee;padding-bottom:.2rem;">Lower Body (${u})</h4>
+          <table style="width:100%;font-size:0.8rem;border-collapse:collapse;">
+            <tr><td style="padding:.2rem 0;color:#666;">Trouser Waist:</td><td style="font-weight:700;text-align:right;">${m.trouser_waist || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Trouser Hip:</td><td style="font-weight:700;text-align:right;">${m.trouser_hip || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Trouser Length:</td><td style="font-weight:700;text-align:right;">${m.trouser_length || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Inseam:</td><td style="font-weight:700;text-align:right;">${m.inseam || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Thigh / Knee:</td><td style="font-weight:700;text-align:right;">${m.thigh || '—'} / ${m.knee || '—'}</td></tr>
+            <tr><td style="padding:.2rem 0;color:#666;">Bottom Hem:</td><td style="font-weight:700;text-align:right;">${m.bottom_opening || '—'}</td></tr>
+          </table>
+        </div>
+      </div>
+
+      ${m.notes ? `
+        <div style="background:#f9fafb;border-left:3px solid #7B1F3A;padding:.6rem .8rem;font-size:0.8rem;margin-bottom:1.2rem;">
+          <strong>Tailor Notes / Styling:</strong> ${esc(m.notes)}
+        </div>
+      ` : ''}
+
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px dashed #ccc;padding-top:1rem;font-size:0.75rem;color:#888;">
+        <div>Order Ref: #${String(m.id).slice(-8).toUpperCase()}</div>
+        <div style="text-align:right;border-top:1px solid #333;width:140px;padding-top:.2rem;color:#333;">Master Tailor Sign</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('slipContent').innerHTML = html;
+  document.getElementById('printArea').innerHTML = html;
+  document.getElementById('slipModal').classList.add('open');
+}
+
+function closeSlipModal() {
+  document.getElementById('slipModal').classList.remove('open');
+}
+
+function doPrintSlip() {
+  window.print();
+}
+
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Close modals when clicking background overlay
+window.addEventListener('click', e => {
+  const measureModal = document.getElementById('measureModal');
+  const slipModal    = document.getElementById('slipModal');
+  if (e.target === measureModal) closeMeasurementModal();
+  if (e.target === slipModal) closeSlipModal();
+});
+</script>
+</body>
+</html>

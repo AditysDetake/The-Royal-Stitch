@@ -19,6 +19,7 @@ const Admin        = require('./models/Admin');
 const Measurement  = require('./models/Measurement');
 
 const app  = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
 // ── Connect to MongoDB Atlas ──────────────────────
